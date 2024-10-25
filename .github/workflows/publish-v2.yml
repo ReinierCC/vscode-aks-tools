@@ -96,14 +96,18 @@ jobs:
       - name: Find the .vsix file
         id: find-vsix
         run: |
-          vsix_file=$(find . -name '*.vsix')
-          echo "vsix_file=$vsix_file" >> $GITHUB_OUTPUT
+          asset_path=$(find . -name '*.vsix')
+          asset_name=$(basename "$asset_path")  # Extract filename without the ./ prefix
+          echo "vsix_path=$asset_path" >> $GITHUB_OUTPUT
+          echo "vsix_name=$asset_name" >> $GITHUB_OUTPUT
 
       - name: Find the .vsix file
         id: output-vsix-name
         run: |
-          echo ${{ steps.find-vsix.outputs.vsix_file }}
+          echo ${{ steps.find-vsix.outputs.vsix_path }}
+          echo ${{ steps.find-vsix.outputs.vsix_name }}
+          
         
       - name: Publish packaged extension
         run: |
-          npx vsce publish --azure-credential --packagePath ${{ steps.find-vsix.outputs.vsix_file }}
+          npx vsce publish --azure-credential --packagePath ${{ steps.find-vsix.outputs.vsix_path }}
