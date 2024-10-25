@@ -97,7 +97,13 @@ jobs:
         id: find-vsix
         run: |
           vsix_file=$(find . -name '*.vsix')
+          echo "vsix_file=$vsix_file" >> $GITHUB_OUTPUT
+
+      - name: Find the .vsix file
+        id: output-vsix-name
+        run: |
+          echo ${{ steps.find-vsix.outputs.vsix_file }}
         
       - name: Publish packaged extension
         run: |
-          npx vsce publish --azure-credential --packagePath *.vsix
+          npx vsce publish --azure-credential --packagePath ${{ steps.find-vsix.outputs.vsix_file }}
