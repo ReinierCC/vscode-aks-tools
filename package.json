@@ -162,6 +162,10 @@
         },
         "commands": [
             {
+                "command": "aks.connectToGH",
+                "title": "Connect to GitHub with DevHub"
+            },
+            {
                 "command": "aks.selectSubscriptions",
                 "title": "Select subscriptions...",
                 "category": "AKS",
@@ -521,7 +525,9 @@
     "devDependencies": {
         "@types/chai": "^4.3.17",
         "@types/decompress": "^4.2.7",
+        "@types/dotenv": "^6.1.1",
         "@types/js-yaml": "^4.0.9",
+        "@types/libsodium-wrappers-sumo": "^0.7.8",
         "@types/mocha": "^10.0.7",
         "@types/node": "^22.2.0",
         "@types/semver": "^7.5.8",
@@ -549,6 +555,7 @@
         "@azure/arm-authorization": "^9.0.0",
         "@azure/arm-containerregistry": "^10.1.0",
         "@azure/arm-containerservice": "^21.0.0",
+        "@azure/arm-devhub": "^1.0.0-beta.3",
         "@azure/arm-monitor": "^7.0.0",
         "@azure/arm-resources": "^5.2.0",
         "@azure/arm-resources-subscriptions": "^2.1.0",
@@ -562,9 +569,13 @@
         "@microsoft/microsoft-graph-client": "^3.0.7",
         "@microsoft/vscode-azext-utils": "^2.5.6",
         "@octokit/rest": "^21.0.2",
+        "@types/libsodium-wrappers": "^0.7.14",
         "@vscode/extension-telemetry": "^0.9.7",
         "decompress": "^4.2.1",
+        "dotenv": "^16.4.5",
         "js-yaml": "^4.1.0",
+        "libsodium-wrappers": "^0.7.15",
+        "libsodium-wrappers-sumo": "^0.7.15",
         "move-file": "^3.1.0",
         "node-fetch": "^3.3.2",
         "rxjs": "^7.8.1",
