@@ -1,18 +1,20 @@
 import { Message, MessageContext, MessageDefinition, MessageHandler, MessageSink } from "./messaging";
-import { ClusterPropertiesDefinition } from "./webviewDefinitions/clusterProperties";
 import { AttachAcrToClusterDefinition } from "./webviewDefinitions/attachAcrToCluster";
+import { ASODefinition } from "./webviewDefinitions/azureServiceOperator";
+import { ClusterPropertiesDefinition } from "./webviewDefinitions/clusterProperties";
 import { CreateClusterDefinition } from "./webviewDefinitions/createCluster";
 import { DetectorDefinition } from "./webviewDefinitions/detector";
 import { DraftDeploymentDefinition } from "./webviewDefinitions/draft/draftDeployment";
 import { DraftDockerfileDefinition } from "./webviewDefinitions/draft/draftDockerfile";
 import { DraftWorkflowDefinition } from "./webviewDefinitions/draft/draftWorkflow";
-import { KubectlDefinition } from "./webviewDefinitions/kubectl";
 import { InspektorGadgetDefinition } from "./webviewDefinitions/inspektorGadget";
+import { KaitoDefinition } from "./webviewDefinitions/kaito";
+import { KaitoModelsDefinition } from "./webviewDefinitions/kaitoModels";
+import { KubectlDefinition } from "./webviewDefinitions/kubectl";
 import { PeriscopeDefinition } from "./webviewDefinitions/periscope";
-import { TestStyleViewerDefinition } from "./webviewDefinitions/testStyleViewer";
-import { ASODefinition } from "./webviewDefinitions/azureServiceOperator";
-import { TCPDumpDefinition } from "./webviewDefinitions/tcpDump";
 import { RetinaCaptureDefinition } from "./webviewDefinitions/retinaCapture";
+import { TCPDumpDefinition } from "./webviewDefinitions/tcpDump";
+import { TestStyleViewerDefinition } from "./webviewDefinitions/testStyleViewer";
 
 /**
  * Groups all the related types for a single webview.
@@ -46,6 +48,8 @@ type AllWebviewDefinitions = {
     aso: ASODefinition;
     tcpDump: TCPDumpDefinition;
     retinaCapture: RetinaCaptureDefinition;
+    kaito: KaitoDefinition;
+    kaitoModels: KaitoModelsDefinition;
 };
 
 type ContentIdLookup = {

@@ -1,5 +1,59 @@
 # Change Log
 
+## [1.5.0]
+
+* Kaito deployment & ux updates.
+* New Publish Action on Secure Runner.
+* Improvements for GH copilot handlers.
+* New Publish Workflow Fix.
+* Manually fetching package.json version.
+* Changing npm to npx.
+* Kaito additional error & quota handling.
+* kaito needs to be KAITO named.
+* Add documentation for GH Copilot handlers and telemetry.
+* Dependabot updates and bumps.
+
+Thank you so much to @tejhan, @ReinierCC, @kejatura-dev, @ivelisseca, @qpetraroia, @hsubramanianaks, Joy, Sachi for contributions, testing and reviews.
+
+## [1.4.11]
+
+* Add deploy manifest handler for GH Copilot.
+* Kubectl savedialog UX changes.
+* Support creating automatic aks from GH Copilot.
+* Kubectl command generation plugin for GH Copilot.
+* Add cluster options util for GH Copilot scenarios
+* Fix dependabot update for 1.94 with engine update.
+* Fix for different format of serviceprincal id from auth sessions.
+* Role assignments for automatic sku.
+* Support create automatic aks cluster.
+* New namespace creation in github workflow.
+* Dependabot updates and bumps.
+
+Welcome new contributors @kejatura-dev to the repo. Thanks to  @tejhan, @ReinierCC,  @ivelisseca, @qpetraroia, @hsubramanianaks, Joy for contributions, testing and reviews.
+
+## [1.4.10]
+
+* Fix for walkthrough and show welcome dependency.
+* Fixing freezing dockerfile create page.
+* Fix U/X Bugs.
+* Incremental In-Progress KAITO Work.
+* Dependabot updates and bumps.
+
+Welcome new contributors @tejhan & @ReinierCC to the repo. Thanks to  @ivelisseca, @qpetraroia, @hsubramanianaks, @ReinierCC, @tejhan for contributions, testing and reviews.
+
+## [1.4.9]
+
+* AKS diagnostic bug resolved & storage diagnostic added.
+* Updated github auth scope to repo.
+* Adding flag to prevent draft from checking for manifests.
+* U/X add border for the row.
+* Fix the eslint no-unused-vars errors.
+* changing draft version to .38 and removing manual appname.
+* Add U/X tooltip changes.
+* Dependabot updates and bumps.
+
+Welcome new contributors @tejhan & @ReinierCC to the repo. Thanks to  @ivelisseca, @qpetraroia, @hsubramanianaks, @ReinierCC, @tejhan for contributions, testing and reviews.
+
 ## [1.4.8]
 
 * Add Support Plan and Preview information in cluster Properties Page.

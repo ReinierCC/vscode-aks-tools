@@ -1,3 +1,9 @@
+import * as azcs from "@azure/arm-containerservice";
+import * as fs from "fs";
+import * as yaml from "js-yaml";
+import * as path from "path";
+import { dirSync } from "tmp";
+import { AuthenticationSession, authentication, window } from "vscode";
 import {
     API,
     APIAvailable,
@@ -7,22 +13,17 @@ import {
     KubectlV1,
     extension,
 } from "vscode-kubernetes-tools-api";
+import { getTokenInfo } from "../../auth/azureAuth";
+import { ReadyAzureSessionProvider, TokenInfo } from "../../auth/types";
 import { AksClusterTreeNode } from "../../tree/aksClusterTreeItem";
-import * as azcs from "@azure/arm-containerservice";
-import { Errorable, failed, getErrorMessage, map as errmap, succeeded } from "./errorable";
 import { SubscriptionTreeNode, isSubscriptionTreeNode } from "../../tree/subscriptionTreeItem";
-import * as yaml from "js-yaml";
-import * as fs from "fs";
-import * as path from "path";
+import { getAksClient } from "./arm";
+import { Errorable, map as errmap, failed, getErrorMessage, succeeded } from "./errorable";
 import { getKubeloginBinaryPath } from "./helper/kubeloginDownload";
 import { longRunning } from "./host";
-import { dirSync } from "tmp";
-import { ReadyAzureSessionProvider, TokenInfo } from "../../auth/types";
-import { AuthenticationSession, authentication } from "vscode";
-import { getTokenInfo } from "../../auth/azureAuth";
-import { getAksClient } from "./arm";
-import { withOptionalTempFile } from "./tempfile";
 import { invokeKubectlCommand } from "./kubectl";
+import { withOptionalTempFile } from "./tempfile";
+import { getResources } from "./azureResources";
 
 export interface KubernetesClusterInfo {
     readonly name: string;
@@ -535,6 +536,71 @@ export async function rotateClusterCert(
     }
 }
 
+export async function filterPodName(
+    sessionProvider: ReadyAzureSessionProvider,
+    kubectl: APIAvailable<KubectlV1>,
+    subscriptionId: string,
+    resourceGroup: string,
+    clusterName: string,
+    podNameStartsWith: string,
+): Promise<Errorable<string[]>> {
+    const cluster = await getManagedCluster(sessionProvider, subscriptionId, resourceGroup, clusterName);
+    if (failed(cluster)) {
+        return cluster;
+    }
+
+    const kubeconfig = await getKubeconfigYaml(sessionProvider, subscriptionId, resourceGroup, cluster.result);
+    if (failed(kubeconfig)) {
+        return kubeconfig;
+    }
+
+    const result = await withOptionalTempFile(kubeconfig.result, "yaml", async (kubeconfigPath) => {
+        const command = `get pods --all-namespaces --no-headers -o custom-columns=":metadata.name"`;
+        const output = await invokeKubectlCommand(kubectl, kubeconfigPath, command);
+        return errmap(output, (sr) => sr.stdout.trim().split("\n"));
+    });
+
+    let filterPodName: string[] = [];
+    if (succeeded(result)) {
+        filterPodName = result.result.filter((podName) => podName.includes(podNameStartsWith));
+    }
+
+    return { succeeded: true, result: filterPodName };
+}
+
 function isDefinedManagedCluster(cluster: azcs.ManagedCluster): cluster is DefinedManagedCluster {
-    return cluster.id !== undefined && cluster.name !== undefined && cluster.location !== undefined;
+    return (
+        cluster.id !== undefined &&
+        cluster.name !== undefined &&
+        cluster.location !== undefined &&
+        cluster.nodeResourceGroup !== undefined
+    );
+}
+
+export type Cluster = {
+    name: string;
+    clusterId: string;
+    resourceGroup: string;
+    subscriptionId: string;
+}
+
+export async function getClusters(sessionProvider: ReadyAzureSessionProvider, subscriptionId: string): Promise<Cluster[]> {
+    const clusters = await getResources(
+        sessionProvider,
+        subscriptionId,
+        "Microsoft.ContainerService/managedClusters",
+    );
+    if (failed(clusters)) {
+        window.showErrorMessage(clusters.error);
+        return [];
+    }
+
+    return clusters.result.map((cluster) => {
+        return {
+            name: cluster.name,
+            clusterId: cluster.id,
+            resourceGroup: cluster.resourceGroup,
+            subscriptionId: subscriptionId,
+        };
+    });
 }

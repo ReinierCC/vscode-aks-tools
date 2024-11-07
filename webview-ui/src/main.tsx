@@ -1,21 +1,23 @@
+import "@vscode/codicons/dist/codicon.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./main.css";
-import "@vscode/codicons/dist/codicon.css";
 import { decodeState } from "../../src/webview-contract/initialState";
-import { CreateCluster } from "./CreateCluster/CreateCluster";
 import { ContentId } from "../../src/webview-contract/webviewTypes";
-import { TestStyleViewer } from "./TestStyleViewer/TestStyleViewer";
-import { Periscope } from "./Periscope/Periscope";
-import { Detector } from "./Detector/Detector";
-import { InspektorGadget } from "./InspektorGadget/InspektorGadget";
-import { Kubectl } from "./Kubectl/Kubectl";
+import { AttachAcrToCluster } from "./AttachAcrToCluster/AttachAcrToCluster";
 import { AzureServiceOperator } from "./AzureServiceOperator/AzureServiceOperator";
 import { ClusterProperties } from "./ClusterProperties/ClusterProperties";
-import { TcpDump } from "./TCPDump/TcpDump";
-import { RetinaCapture } from "./RetinaCapture/RetinaCapture";
-import { AttachAcrToCluster } from "./AttachAcrToCluster/AttachAcrToCluster";
+import { CreateCluster } from "./CreateCluster/CreateCluster";
+import { Detector } from "./Detector/Detector";
 import { DraftDeployment, DraftDockerfile, DraftWorkflow } from "./Draft";
+import { InspektorGadget } from "./InspektorGadget/InspektorGadget";
+import { Kaito } from "./Kaito/Kaito";
+import { KaitoModels } from "./KaitoModels/KaitoModels";
+import { Kubectl } from "./Kubectl/Kubectl";
+import "./main.css";
+import { Periscope } from "./Periscope/Periscope";
+import { RetinaCapture } from "./RetinaCapture/RetinaCapture";
+import { TcpDump } from "./TCPDump/TcpDump";
+import { TestStyleViewer } from "./TestStyleViewer/TestStyleViewer";
 
 // There are two modes of launching this application:
 // 1. Via the VS Code extension inside a Webview.
@@ -59,6 +61,8 @@ function getVsCodeContent(): JSX.Element {
         aso: () => <AzureServiceOperator {...getInitialState()} />,
         tcpDump: () => <TcpDump {...getInitialState()} />,
         retinaCapture: () => <RetinaCapture {...getInitialState()} />,
+        kaito: () => <Kaito {...getInitialState()} />,
+        kaitoModels: () => <KaitoModels {...getInitialState()} />,
     };
 
     return rendererLookup[vscodeContentId]();
