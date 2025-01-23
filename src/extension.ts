@@ -55,7 +55,7 @@ import { aksCreateClusterFromCopilot } from "./commands/aksCreateCluster/aksCrea
 import { aksDeployManifest } from "./commands/aksDeployManifest/aksDeployManifest";
 import { aksOpenKubectlPanel } from "./commands/aksOpenKubectlPanel/aksOpenKubectlPanel";
 
-let _resolveAuth: ((token: string) => void) | undefined;
+let resolveAuth: ((token: string) => void) | undefined;
 
 export async function activate(context: vscode.ExtensionContext) {
     const cloudExplorer = await k8s.extension.cloudExplorer.v1;
@@ -79,8 +79,8 @@ export async function activate(context: vscode.ExtensionContext) {
                 console.log("No authorization code found in the callback.");
             }
 
-            if (_resolveAuth) {
-                _resolveAuth(code || "");
+            if (resolveAuth) {
+                resolveAuth(code || "");
             }
         } else {
             console.log(`Unexpected URI path: ${uri.path}`);
