@@ -55,10 +55,41 @@ import { aksCreateClusterFromCopilot } from "./commands/aksCreateCluster/aksCrea
 import { aksDeployManifest } from "./commands/aksDeployManifest/aksDeployManifest";
 import { aksOpenKubectlPanel } from "./commands/aksOpenKubectlPanel/aksOpenKubectlPanel";
 
+let _resolveAuth: ((token: string) => void) | undefined;
+
 export async function activate(context: vscode.ExtensionContext) {
     const cloudExplorer = await k8s.extension.cloudExplorer.v1;
     context.subscriptions.push(new Reporter());
     setAssetContext(context);
+
+    // Clean up with function call
+    const handleUri = (uri: vscode.Uri) => {
+        if (uri.path === "/callback") {
+            // Check the path, not the scheme
+            vscode.window.showInformationMessage("AKS extension: Handling callback");
+            console.log("AKS extension: Handling callback");
+
+            // Extract query parameters
+            const code = new URLSearchParams(uri.query).get("code");
+            if (code) {
+                vscode.window.showInformationMessage(`Authorization code: ${code}`);
+                console.log(`Authorization code: ${code}`);
+            } else {
+                vscode.window.showErrorMessage("No authorization code found in the callback.");
+                console.log("No authorization code found in the callback.");
+            }
+
+            if (_resolveAuth) {
+                _resolveAuth(code || "");
+            }
+        } else {
+            console.log(`Unexpected URI path: ${uri.path}`);
+        }
+    };
+
+    context.subscriptions.push(vscode.window.registerUriHandler({ handleUri }));
+
+    vscode.window.showInformationMessage("AKS extension activated and URI handler registered.");
 
     // Create and register the Azure session provider before accessing it.
     activateAzureSessionProvider(context);
